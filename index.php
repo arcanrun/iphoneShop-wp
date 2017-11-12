@@ -1,4 +1,5 @@
 <?php
+$meta = new stdClass;
 /**
  * The main template file
  *
@@ -23,47 +24,45 @@ get_header(); ?>
 			<li data-target="#myCarousel" data-slide-to="1"></li>
 			<li data-target="#myCarousel" data-slide-to="2"></li>
 		</ol>
-
+<div class="carousel-inner">
 		<!-- Wrapper for slides -->
-		<div class="carousel-inner">
-			<div class="item active">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-12">
-							<h2>Сумасшедшая распродажа</h2>
-							<h1>iPhone 7</h1>
-							<p>Всего за 44 000 рублей</p>
-							<a class="btn" href="card.html"><i class="fa fa-shopping-basket" aria-hidden="true"></i>Перейти к покупке</a>
-						</div>
-					</div>
-				</div>
-			</div>
 
-			<div class="item">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-12">
-							<h2>Сумасшедшая распродажа</h2>
-							<h1>iPhone 7</h1>
-							<p>Всего за 44 000 рублей</p>
-							<a class="btn" href="card.html"><i class="fa fa-shopping-basket" aria-hidden="true"></i>Перейти к покупке</a>
-						</div>
-					</div>
-				</div>
-			</div>
+		<?php 
+		$argsSilder = array(
+			'category_name' => 'slider',
+			'numberposts' => -1,
+				
+);
 
-			<div class="item">
+
+
+$postSlider = get_posts( $argsSilder );
+		$activeSlider = 0;
+		foreach($postSlider as $post){ setup_postdata($post); 
+		
+          	foreach( (array) get_post_meta( $post->ID ) as $kSlider => $vSlider ) $meta->$kSlider = $vSlider[0];
+
+          	?>
+	
+		
+		
+			<div id="slder-<?php echo $post->ID; ?>" class="item <?php if($activeSlider == 0){ echo 'active';} ?>">
 				<div class="container">
 					<div class="row">
-						<div class="col-lg-12">
-							<h2>Сумасшедшая распродажа</h2>
-							<h1>iPhone 7</h1>
-							<p>Всего за 44 000 рублей</p>
-							<a class="btn" href="card.html"><i class="fa fa-shopping-basket" aria-hidden="true"></i>Перейти к покупке</a>
+						<div class="col-lg-12 "> 
+
+							<h2><?php echo $meta->sliderH2 ?></h2>
+							<h1><?php  the_title(); ?></h1>
+							<p><?php the_content(); ?></p> 
+							<a class="btn" href="<?php the_permalink(  ); ?>"><i class="fa fa-shopping-basket" aria-hidden="true"></i>Перейти к покупке</a>
 						</div>
 					</div>
 				</div>
 			</div>
+	
+			<?php  $activeSlider++; }	wp_reset_postdata();?>
+
+
 		</div>
 	</div>
 </section>
@@ -73,6 +72,8 @@ get_header(); ?>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-lg-4 col-md-4">
+
+
 				<!-- item -->
 				<div class="wrapper-item item-1">
 					<div class="wrapper-text-item">
@@ -115,28 +116,25 @@ get_header(); ?>
 <section class="section-2">
 	<div class="container">
 		<?php
-		$meta = new stdClass;
+		
 		$counter = 0;
 		$colnSumm = 0;
-		$args = array( 'numberposts' => -1,
-			'nopaging' => 1	
+		$args = array(
+			'numberposts' => -1,
+			
 		);
 		$myposts = get_posts($args);
 		foreach( $myposts as $post ){ setup_postdata($post);
 
 			if ($colnSumm == 12) :
-						$colnSumm = 0;
+				$colnSumm = 0;
             echo "</div>"; // close div if it's not the first
             echo "<div class='row'>";
-            
           endif;
-         if($counter == 0)
-         {
-         
-            echo "<div class='row'>";
-         }
-         
-      			
+          if($counter == 0)
+          {
+          	echo "<div class='row'>";
+          }
           $categories = get_the_category();
           if($categories)
           {
@@ -147,50 +145,43 @@ get_header(); ?>
           }
           if($getCatNam == "good-item")
           {
-          		$colnSumm = $colnSumm + 3;
-          	?>
-
+          	$colnSumm = $colnSumm + 3;?>
           	<div class="col-lg-3 col-md-3">
           		<div class="item-good"	id="post-<?php the_ID(); ?>">
           			<div class="good-img-blc view overlay hm-zoom">
           				<?php the_post_thumbnail(); ?>
           			</div>
-
           			<h3><?php the_title(); ?></h3>
-
           			<p><?php the_content(); ?></p>
           			<a class="btn" href="<?php the_permalink(); ?>">Перейти к покупке</a>
           		</div>
           	</div>
           	<?php
-          	 }
-          	else if($getCatNam == "wide-good-item")
-          	{ 
-          			$colnSumm = $colnSumm + 6;
-          		foreach( (array) get_post_meta( $post->ID ) as $k => $v ) $meta->$k = $v[0];
+          }
+          else if($getCatNam == "wide-good-item")
+          { 
+          	$colnSumm = $colnSumm + 6;
+          	foreach( (array) get_post_meta( $post->ID ) as $k => $v ) $meta->$k = $v[0];?>
+          	<!-- wide-good item -->
+          	<div class="col-lg-6 col-md-6">
+          		<div class="item-good-wide ">
+          			<div class="good-wide-img-blc view overlay hm-zoom">
+          				<?php the_post_thumbnail(); ?>
+          			</div>
+          			<div class="good-wide-wrapper-action ">
+          				<span><?php echo $meta->price; ?></span>
+          				<a class="btn" href="<?php the_permalink(); ?>"><i class="fa fa-shopping-basket" aria-hidden="true"></i>Оформить</a>
+          			</div>
+          			<div class="good-wide-wrapper-text ">
 
-          		?>
-          		<!-- wide-good item -->
-          		<div class="col-lg-6 col-md-6">
-          			<div class="item-good-wide ">
-          				<div class="good-wide-img-blc view overlay hm-zoom">
-          					<?php the_post_thumbnail(); ?>
-          				</div>
-          				<div class="good-wide-wrapper-action ">
-          					<span><?php echo $meta->price; ?></span>
-          					<a class="btn" href="<?php the_permalink(); ?>"><i class="fa fa-shopping-basket" aria-hidden="true"></i>Оформить</a>
-          				</div>
-          				<div class="good-wide-wrapper-text ">
-
-          					<h3><?php the_title(); ?></h3>
-          					<span><?php echo $meta->subTitle; ?></span>
-          					<p><?php the_content(); ?></p>
-          				</div>
+          				<h3><?php the_title(); ?></h3>
+          				<span><?php echo $meta->subTitle; ?></span>
+          				<p><?php the_content(); ?></p>
           			</div>
           		</div>
-          		<!-- end wide-good item -->
-          		<?php  }
-          		$counter++; }
+          	</div>
+          	<!-- end wide-good item -->
+          	<?php } $counter++; }
 wp_reset_postdata(); // сбрасываем переменную $post
 ?>
 
