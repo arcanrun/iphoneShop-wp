@@ -19,54 +19,51 @@ get_header(); ?>
 
 	<div id="myCarousel" class="carousel slide" data-ride="carousel">
 		<!-- Indicators -->
-		<ol class="carousel-indicators">
-			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-			<li data-target="#myCarousel" data-slide-to="1"></li>
-			<li data-target="#myCarousel" data-slide-to="2"></li>
-		</ol>
-<div class="carousel-inner">
-		<!-- Wrapper for slides -->
-
-		<?php 
-		$argsSilder = array(
-			'category_name' => 'slider',
-			'numberposts' => -1,
-				
-);
-
-
-
-$postSlider = get_posts( $argsSilder );
-		$activeSlider = 0;
-		foreach($postSlider as $post){ setup_postdata($post); 
 		
-          	foreach( (array) get_post_meta( $post->ID ) as $kSlider => $vSlider ) $meta->$kSlider = $vSlider[0];
+		<div class="carousel-inner">
+			<!-- Wrapper for slides -->
+			<?php 
+			$argsSilder = array(
+													'category_name' => 'slider',
+													'numberposts' => -1,
+													);
 
-          	?>
-	
-		
-		
-			<div id="slder-<?php echo $post->ID; ?>" class="item <?php if($activeSlider == 0){ echo 'active';} ?>">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-12 "> 
+			$postSlider = get_posts( $argsSilder );
+			$activeSlider = 0;
+			foreach($postSlider as $post){ setup_postdata($post); 
+				foreach( (array) get_post_meta( $post->ID ) as $kSlider => $vSlider ) $meta->$kSlider = $vSlider[0];	
+				$countSliders = wp_get_cat_postnum(get_cat_ID( 'slider' ));
+        
+				?>
 
-							<h2><?php echo $meta->sliderH2 ?></h2>
-							<h1><?php  the_title(); ?></h1>
-							<p><?php the_content(); ?></p> 
-							<a class="btn" href="<?php the_permalink(  ); ?>"><i class="fa fa-shopping-basket" aria-hidden="true"></i>Перейти к покупке</a>
+				<div id="slder-<?php echo $post->ID; ?>" class="item <?php if($activeSlider == 0){ echo 'active';} ?>">
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-12 "> 
+
+								<h2><?php echo $meta->sliderH2; ?></h2>
+								<h1><?php  the_title();  ?></h1>
+								<p><?php the_content(); ?></p> 
+								<a class="btn" href="<?php the_permalink(  ); ?>"><i class="fa fa-shopping-basket" aria-hidden="true"></i>Перейти к покупке</a>
+							</div>
 						</div>
 					</div>
 				</div>
+
+				<?php  $activeSlider++; }	wp_reset_postdata();?>
+
+
 			</div>
-	
-			<?php  $activeSlider++; }	wp_reset_postdata();?>
+			<ol class="carousel-indicators">
+			<?php for ($i=0; $i < $countSliders ; $i++) { ?>
 
+			<li data-target="#myCarousel" data-slide-to="<?php echo $i; ?>" class="<?php if($i == 0){ echo 'active';} ?>"></li>
 
+			<?php } ?>
+			</ol>
 		</div>
-	</div>
-</section>
-<!-- header-section -->
+	</section>
+	<!-- header-section -->
 </header>
 <section class="section-1">
 	<div class="container-fluid">
