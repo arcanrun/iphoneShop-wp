@@ -13,44 +13,189 @@
  */
 
 get_header(); ?>
+<!-- header-section -->
+<section class="header-section">
 
-	<div id="primary" class="content-area">
-		<main id="main" class="site-main">
+	<div id="myCarousel" class="carousel slide" data-ride="carousel">
+		<!-- Indicators -->
+		<ol class="carousel-indicators">
+			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+			<li data-target="#myCarousel" data-slide-to="1"></li>
+			<li data-target="#myCarousel" data-slide-to="2"></li>
+		</ol>
 
+		<!-- Wrapper for slides -->
+		<div class="carousel-inner">
+			<div class="item active">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12">
+							<h2>Сумасшедшая распродажа</h2>
+							<h1>iPhone 7</h1>
+							<p>Всего за 44 000 рублей</p>
+							<a class="btn" href="card.html"><i class="fa fa-shopping-basket" aria-hidden="true"></i>Перейти к покупке</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="item">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12">
+							<h2>Сумасшедшая распродажа</h2>
+							<h1>iPhone 7</h1>
+							<p>Всего за 44 000 рублей</p>
+							<a class="btn" href="card.html"><i class="fa fa-shopping-basket" aria-hidden="true"></i>Перейти к покупке</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="item">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12">
+							<h2>Сумасшедшая распродажа</h2>
+							<h1>iPhone 7</h1>
+							<p>Всего за 44 000 рублей</p>
+							<a class="btn" href="card.html"><i class="fa fa-shopping-basket" aria-hidden="true"></i>Перейти к покупке</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- header-section -->
+</header>
+<section class="section-1">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-4 col-md-4">
+				<!-- item -->
+				<div class="wrapper-item item-1">
+					<div class="wrapper-text-item">
+						<h2>iPhone 8</h2>
+						<p>Уже в продаже!</p>
+					</div>
+					<img src="img/sec1.png" alt="">
+				</div>
+				<!-- end item -->
+			</div>
+			<div class="col-lg-4 col-md-4">
+				<!-- item -->
+				<div class="wrapper-item item-2">
+					<div class="wrapper-text-item">
+						<h2>Apple
+						Watch 3</h2>
+						<p>В продаже <br>
+						с 10 октября</p>
+					</div>
+					<img src="img/sec2.png" alt="">
+				</div>
+			</div>
+			<!-- end item -->
+			<div class="col-lg-4 col-md-4">
+				<!-- item -->
+				<div class="wrapper-item item-3">
+					<div class="wrapper-text-item">
+						<h2>iPhone Х</h2>
+						<p>В продаже с 3 ноября</p>
+
+					</div>
+					<img src="img/sec3.png" alt="">
+				</div>
+			</div>
+			<!-- end item -->
+		</div>
+	</div>
+</section>
+<!-- end section-1 -->
+<section class="section-2">
+	<div class="container">
 		<?php
-		if ( have_posts() ) :
+		$meta = new stdClass;
+		$counter = 0;
+$args = array( 'numberposts' => -1,
+							'nopaging' => 1	
+								);
+$myposts = get_posts($args);
+foreach( $myposts as $post ){ setup_postdata($post);
 
-			if ( is_home() && ! is_front_page() ) : ?>
-				<header>
-					<h1 class="page-title screen-reader-text"><?php single_post_title(); ?></h1>
-				</header>
+	if ($counter % 4 == 0) :
+            echo $counter > 0 ? "</div>" : ""; // close div if it's not the first
+            echo "<div class='row'>";
+          endif;
+          $categories = get_the_category();
+						if($categories)
+						{
+							foreach($categories as $category) 
+							{
+								$getCatNam =  $category->cat_name ;
+							}
+						}
+						if($getCatNam == "good-item")
+						{
 
-			<?php
-			endif;
 
-			/* Start the Loop */
-			while ( have_posts() ) : the_post();
+          ?>
+      
+          <div class="col-lg-3 col-md-3">
+          	<div class="item-good"	id="post-<?php the_ID(); ?>">
+          		<div class="good-img-blc view overlay hm-zoom">
+          			<?php the_post_thumbnail(); ?>
+          		</div>
+          
+          		<h3><?php the_title(); ?></h3>
 
-				/*
-				 * Include the Post-Format-specific template for the content.
-				 * If you want to override this in a child theme, then include a file
-				 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
-				 */
-				get_template_part( 'template-parts/content', get_post_format() );
+          		<p><?php the_content(); ?></p>
+          		<a class="btn" href="<?php the_permalink(); ?>">Перейти к покупке</a>
+          	</div>
+          </div>
+          <?php }
+          else if($getCatNam == "wide-good-item")
+          { 
 
-			endwhile;
+						foreach( (array) get_post_meta( $post->ID ) as $k => $v ) $meta->$k = $v[0];
 
-			the_posts_navigation();
 
-		else :
+          	?>
+          	<!-- wide-good item -->
+						<div class="col-lg-6 col-md-6">
+							<div class="item-good-wide ">
+								<div class="good-wide-img-blc view overlay hm-zoom">
+									<?php the_post_thumbnail(); ?>
+								</div>
+								<div class="good-wide-wrapper-action ">
+									<span><?php echo $meta->price; ?></span>
+									<a class="btn" href="<?php the_permalink(); ?>"><i class="fa fa-shopping-basket" aria-hidden="true"></i>Оформить</a>
+								</div>
+								<div class="good-wide-wrapper-text ">
 
-			get_template_part( 'template-parts/content', 'none' );
+									<h3><?php the_title(); ?></h3>
+									<span><?php echo $meta->subTitle; ?></span>
+									<p><?php the_content(); ?></p>
+									</div>
+								</div>
+							</div>
+							<!-- end wide-good item -->
+         <?php  }
+          $counter++;}
+wp_reset_postdata(); // сбрасываем переменную $post
+?>
 
-		endif; ?>
 
-		</main><!-- #main -->
-	</div><!-- #primary -->
 
-<?php
-get_sidebar();
-get_footer();
+
+
+
+</div></div></section>
+<?php get_footer();
+
+
+
+?>
+
+</div></div></section>
+<?php get_footer();
