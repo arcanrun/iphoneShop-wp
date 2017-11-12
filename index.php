@@ -117,71 +117,80 @@ get_header(); ?>
 		<?php
 		$meta = new stdClass;
 		$counter = 0;
-$args = array( 'numberposts' => -1,
-							'nopaging' => 1	
-								);
-$myposts = get_posts($args);
-foreach( $myposts as $post ){ setup_postdata($post);
+		$colnSumm = 0;
+		$args = array( 'numberposts' => -1,
+			'nopaging' => 1	
+		);
+		$myposts = get_posts($args);
+		foreach( $myposts as $post ){ setup_postdata($post);
 
-	if ($counter % 4 == 0) :
-            echo $counter > 0 ? "</div>" : ""; // close div if it's not the first
+			if ($colnSumm == 12) :
+						$colnSumm = 0;
+            echo "</div>"; // close div if it's not the first
             echo "<div class='row'>";
+            
           endif;
+         if($counter == 0)
+         {
+         
+            echo "<div class='row'>";
+         }
+         
+      			
           $categories = get_the_category();
-						if($categories)
-						{
-							foreach($categories as $category) 
-							{
-								$getCatNam =  $category->cat_name ;
-							}
-						}
-						if($getCatNam == "good-item")
-						{
-
-
-          ?>
-      
-          <div class="col-lg-3 col-md-3">
-          	<div class="item-good"	id="post-<?php the_ID(); ?>">
-          		<div class="good-img-blc view overlay hm-zoom">
-          			<?php the_post_thumbnail(); ?>
-          		</div>
-          
-          		<h3><?php the_title(); ?></h3>
-
-          		<p><?php the_content(); ?></p>
-          		<a class="btn" href="<?php the_permalink(); ?>">Перейти к покупке</a>
-          	</div>
-          </div>
-          <?php }
-          else if($getCatNam == "wide-good-item")
-          { 
-
-						foreach( (array) get_post_meta( $post->ID ) as $k => $v ) $meta->$k = $v[0];
-
-
+          if($categories)
+          {
+          	foreach($categories as $category) 
+          	{
+          		$getCatNam =  $category->cat_name ;
+          	}
+          }
+          if($getCatNam == "good-item")
+          {
+          		$colnSumm = $colnSumm + 3;
           	?>
-          	<!-- wide-good item -->
-						<div class="col-lg-6 col-md-6">
-							<div class="item-good-wide ">
-								<div class="good-wide-img-blc view overlay hm-zoom">
-									<?php the_post_thumbnail(); ?>
-								</div>
-								<div class="good-wide-wrapper-action ">
-									<span><?php echo $meta->price; ?></span>
-									<a class="btn" href="<?php the_permalink(); ?>"><i class="fa fa-shopping-basket" aria-hidden="true"></i>Оформить</a>
-								</div>
-								<div class="good-wide-wrapper-text ">
 
-									<h3><?php the_title(); ?></h3>
-									<span><?php echo $meta->subTitle; ?></span>
-									<p><?php the_content(); ?></p>
-									</div>
-								</div>
-							</div>
-							<!-- end wide-good item -->
-         <?php  }
-          $counter++;}
+          	<div class="col-lg-3 col-md-3">
+          		<div class="item-good"	id="post-<?php the_ID(); ?>">
+          			<div class="good-img-blc view overlay hm-zoom">
+          				<?php the_post_thumbnail(); ?>
+          			</div>
+
+          			<h3><?php the_title(); ?></h3>
+
+          			<p><?php the_content(); ?></p>
+          			<a class="btn" href="<?php the_permalink(); ?>">Перейти к покупке</a>
+          		</div>
+          	</div>
+          	<?php
+          	 }
+          	else if($getCatNam == "wide-good-item")
+          	{ 
+          			$colnSumm = $colnSumm + 6;
+          		foreach( (array) get_post_meta( $post->ID ) as $k => $v ) $meta->$k = $v[0];
+
+          		?>
+          		<!-- wide-good item -->
+          		<div class="col-lg-6 col-md-6">
+          			<div class="item-good-wide ">
+          				<div class="good-wide-img-blc view overlay hm-zoom">
+          					<?php the_post_thumbnail(); ?>
+          				</div>
+          				<div class="good-wide-wrapper-action ">
+          					<span><?php echo $meta->price; ?></span>
+          					<a class="btn" href="<?php the_permalink(); ?>"><i class="fa fa-shopping-basket" aria-hidden="true"></i>Оформить</a>
+          				</div>
+          				<div class="good-wide-wrapper-text ">
+
+          					<h3><?php the_title(); ?></h3>
+          					<span><?php echo $meta->subTitle; ?></span>
+          					<p><?php the_content(); ?></p>
+          				</div>
+          			</div>
+          		</div>
+          		<!-- end wide-good item -->
+          		<?php  }
+          		$counter++; }
 wp_reset_postdata(); // сбрасываем переменную $post
 ?>
 
