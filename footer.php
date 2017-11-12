@@ -5,7 +5,7 @@
 
 			<div class="col-lg-3 col-md-3 col-sm-12">
 				<div class="logo-wrapper">
-					<a href="/">
+					<a href= "<?php echo get_home_url(); ?>" >
 						<img src="<?php bloginfo('template_directory')?>/img/logo-black.png" alt="">
 					</a>
 				</div>
@@ -14,14 +14,13 @@
 			<div class="col-lg-9 col-md-9 col-sm-12">	
 				<?php
 				$args = array(
+					'menu' => 'footer', 
+					'container' => 'ul', 
+					'container_class' => '',
+					'menu_class' => ''
+				);
+				wp_nav_menu( $args ); ?>
 
-							'menu' => 'footer', 
-							'container' => 'ul', 
-							'container_class' => '',
-							'menu_class' => ''
-							);
-						wp_nav_menu( $args ); ?>
-			
 				<!-- <ul>
 					<li><a  href="">О компании</a></li>
 					<li><a  href="delivery.html">Доставка и оплата</a></li>
@@ -66,5 +65,8 @@
 	</div>
 </footer>
 
-<link rel="stylesheet" href="<?php bloginfo('template_directory'); ?>/css/main.min.css">
-<script src="<?php bloginfo('template_directory'); ?>/js/scripts.min.js"></script>
+<!-- ================== end body ================= -->
+<link rel="stylesheet" href="<?php bloginfo('template_directory')?>/css/main.min.css">
+<script src="<?php bloginfo('template_directory')?>/js/scripts.min.js"></script>
+</body>
+</html>
